@@ -53,7 +53,7 @@ $downloader = new \Balpom\Downloader\Psr18Downloader($client, $factories);
 #### Download URI
 For test purpose will make request to site [https://ipmy.ru](https://ipmy.ru).
 ```php
-$downloader = $downloader->get('http://ipmy.ru/ip');
+$downloader = $downloader->get('https://ipmy.ru/ip');
 echo $downloader->code(); echo PHP_EOL; // Must be 200.
 echo $downloader->content(); echo PHP_EOL; // Must be your IP.
 ```
