@@ -1,6 +1,6 @@
 {
     "name": "balpom/universal-downloader",
-    "description": "Downloads the contents of the specified URL.",
+    "description": "Downloads the contents of the specified URI or file.",
     "type": "library",
     "homepage": "https://www.balpom.ru",
     "license": "MIT",
