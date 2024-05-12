@@ -1,5 +1,5 @@
 # universal-downloader
-## Simple interface for content downloading on the specified URI (or file location) and it's trivial realisation, based on PSR18 HTTP clients.
+## Simple interfaces for content downloading on the specified URI (or file location) and it's trivial realisations.
 
 This downloader will be useful for websites parsing, working with the REST API and other work with WEB resources via the HTTP protocol.
 This version of the package contains an interface implementation for use with any PSR-18 HTTP clients.
@@ -15,10 +15,10 @@ composer require balpom/universal-downloader
 ```
 
 ### Usage sample
-This downloader requires objects that implement the ResponseFactoryInterface, StreamFactoryInterface and UriFactoryInterface interfaces which defined in the [PSR-17 specification](https://www.php-fig.org/psr/psr-17/).
+PSR18 downloader requires objects that implement the ResponseFactoryInterface, StreamFactoryInterface and UriFactoryInterface interfaces which defined in the [PSR-17 specification](https://www.php-fig.org/psr/psr-17/).
 An excellent library that implements all these interfaces at once (all-in-one) is [Nyholm/psr7](https://github.com/Nyholm/psr7) - will use it.
 
-This downloader realisation also requires an HTTP client that implements the ClientInterface which defined in the [PSR-18 specification](https://www.php-fig.org/psr/psr-18/). For example, will use [phpwebclient/webclient](https://github.com/phpwebclient/webclient) and [guzzle/guzzle](https://github.com/guzzle/guzzle).
+PSR18 downloader realisation also requires an HTTP client that implements the ClientInterface which defined in the [PSR-18 specification](https://www.php-fig.org/psr/psr-18/). For example, will use [phpwebclient/webclient](https://github.com/phpwebclient/webclient) and [guzzle/guzzle](https://github.com/guzzle/guzzle).
 
 #### Installing third-party packages
 ```bash
@@ -53,14 +53,14 @@ $downloader = new \Balpom\Downloader\Psr18Downloader($client, $factories);
 #### Download URI
 For test purpose will make request to site [https://ipmy.ru](https://ipmy.ru).
 ```php
-$downloader = $downloader->get('https://ipmy.ru/ip');
+$downloader = $downloader->get('http://ipmy.ru/ip');
 echo $downloader->code(); echo PHP_EOL; // Must be 200.
 echo $downloader->content(); echo PHP_EOL; // Must be your IP.
 ```
 
-Extended sample you may find in "tests/test.php" file - just run it:
+Extended sample you may find in "tests/test-psr18.php" file - just run it:
 ```bash
-php tests/test.php
+php tests/test-psr18.php
 ```
 
 ### License

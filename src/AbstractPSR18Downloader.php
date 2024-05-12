@@ -74,6 +74,57 @@ abstract class AbstractPSR18Downloader extends AbstractDownloader implements PSR
         return $code;
     }
 
+    public function mime(): string|false
+    {
+        if (!isset($this->response)) {
+            $this->response = null;
+            return false;
+        }
+
+        try {
+            $mime = $this->response->getHeaderLine('Content-Type');
+        } catch (Exception $e) {
+            //throw new DownloaderException("Error: MIME type not defined.");
+            return false;
+        }
+
+        if (empty($mime)) {
+            return false;
+        }
+
+        $mime = strtolower($mime);
+        $mime = explode(';', $mime, 2);
+        $mime = trim($mime[0]);
+
+        return empty($mime) ? false : $mime;
+    }
+
+    public function date(): int
+    {
+        if (!isset($this->response)) {
+            $this->response = null;
+            return time();
+        }
+
+        try {
+            $date = $this->response->getHeaderLine('Last-Modified');
+        } catch (Exception $e) {
+            $date = null;
+        }
+
+        if (!empty($date)) {
+            return strtotime($date);
+        }
+
+        try {
+            $date = $this->response->getHeaderLine('Date');
+        } catch (Exception $e) {
+            $date = null;
+        }
+
+        return empty($date) ? time() : strtotime($date);
+    }
+
     public function content(): string|false
     {
 
