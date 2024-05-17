@@ -9,13 +9,18 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Client\ClientInterface;
 use \Exception;
 
-abstract class AbstractPSR18Downloader extends AbstractDownloader implements PSR18DownloadInterface
+abstract class AbstractPSR18Downloader extends AbstractHttpDownloader implements ClientInterface, PSR18DownloadInterface
 {
 
     protected ClientInterface $client; // PSR18 HTTP client.
     protected ResponseInterface|null $response; // Last response.
     protected int $redirects = 5; // Number of redirects following.
     protected array $headers = [];
+
+    public function result(): HttpDownloadResultInterface
+    {
+        return new PSR18Result($this->response);
+    }
 
     public function response(): ResponseInterface
     {
@@ -24,9 +29,9 @@ abstract class AbstractPSR18Downloader extends AbstractDownloader implements PSR
 
     abstract public function get(string $uri): DownloadInterface;
 
-    abstract public function head(string $uri): PSR18DownloadInterface;
+    abstract public function head(string $uri): HttpDownloadInterface;
 
-    abstract public function post(string $uri, array $data = []): PSR18DownloadInterface;
+    abstract public function post(string $uri, array $data = []): HttpDownloadInterface;
 
     public function sendRequest(RequestInterface $request): ResponseInterface
     {
@@ -55,92 +60,6 @@ abstract class AbstractPSR18Downloader extends AbstractDownloader implements PSR
         $this->redirects = $redirects;
 
         return $this;
-    }
-
-    public function code(): int
-    {
-        if (!isset($this->response)) {
-            $this->response = null;
-            return 0;
-        }
-
-        try {
-            $code = $this->response->getStatusCode();
-        } catch (Exception $e) {
-            //throw new DownloaderException("Error: status code not defined.");
-            return 0;
-        }
-
-        return $code;
-    }
-
-    public function mime(): string|false
-    {
-        if (!isset($this->response)) {
-            $this->response = null;
-            return false;
-        }
-
-        try {
-            $mime = $this->response->getHeaderLine('Content-Type');
-        } catch (Exception $e) {
-            //throw new DownloaderException("Error: MIME type not defined.");
-            return false;
-        }
-
-        if (empty($mime)) {
-            return false;
-        }
-
-        $mime = strtolower($mime);
-        $mime = explode(';', $mime, 2);
-        $mime = trim($mime[0]);
-
-        return empty($mime) ? false : $mime;
-    }
-
-    public function date(): int
-    {
-        if (!isset($this->response)) {
-            $this->response = null;
-            return time();
-        }
-
-        try {
-            $date = $this->response->getHeaderLine('Last-Modified');
-        } catch (Exception $e) {
-            $date = null;
-        }
-
-        if (!empty($date)) {
-            return strtotime($date);
-        }
-
-        try {
-            $date = $this->response->getHeaderLine('Date');
-        } catch (Exception $e) {
-            $date = null;
-        }
-
-        return empty($date) ? time() : strtotime($date);
-    }
-
-    public function content(): string|false
-    {
-
-        if (200 !== $this->code()) {
-            //throw new DownloaderException("Error: status code is not 200 OK.");
-            return false;
-        }
-
-        try {
-            $content = $this->response->getBody()->__toString();
-        } catch (Exception $e) {
-            //throw new DownloaderException("Error: content not defined.");
-            return false;
-        }
-
-        return $content;
     }
 
     protected function getLocation()

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Balpom\UniversalDownloader;
 
-class SimpleDownloader extends AbstractDownloader implements DownloadInterface
+class SimpleDownloader extends AbstractDownloader implements DownloadInterface, DownloadResultInterface
 {
 
     private string|false|null $content;

@@ -21,9 +21,4 @@ interface DownloadInterface
      * For WEB-resource request is being made with GET method.
      */
     public function get(string $uri): DownloadInterface;
-
-    /**
-     * Get content from last request result.
-     */
-    public function content(): string|false;
 }

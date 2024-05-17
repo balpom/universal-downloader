@@ -12,8 +12,6 @@ abstract class AbstractDownloader implements DownloadInterface
 
     abstract public function get(string $uri): DownloadInterface;
 
-    abstract public function content(): string|false;
-
     public function attempts(int $attempts): DownloadInterface
     {
         if (0 > $attempts) {

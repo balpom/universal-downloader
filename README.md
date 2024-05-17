@@ -14,7 +14,15 @@ It is planned to make an implementation that works through [Selenium WebDriver](
 composer require balpom/universal-downloader
 ```
 
-### Usage sample
+### Simple downloader usage sample
+
+```php
+$downloader = new \Balpom\UniversalDownloader\SimpleDownloader();
+$downloader = $downloader->get('https://ipmy.ru/ip');
+echo $downloader->content() . PHP_EOL; // Must be your IP.
+```
+
+### PSR18 downloader usage sample
 PSR18 downloader requires objects that implement the ResponseFactoryInterface, StreamFactoryInterface and UriFactoryInterface interfaces which defined in the [PSR-17 specification](https://www.php-fig.org/psr/psr-17/).
 An excellent library that implements all these interfaces at once (all-in-one) is [Nyholm/psr7](https://github.com/Nyholm/psr7) - will use it.
 
@@ -36,8 +44,8 @@ composer require guzzlehttp/guzzle
 $factory = new \Nyholm\Psr7\Factory\Psr17Factory();
 $client = new \Webclient\Http\Webclient($factory, $factory);
 // Psr17Factories(RequestFactoryInterface $request, StreamFactoryInterface $stream, UriFactoryInterface $uri)
-$factories = new \Balpom\Downloader\Factory\Psr17Factories($factory, $factory, $factory);
-$downloader = new \Balpom\Downloader\Psr18Downloader($client, $factoryies);
+$factories = new \Balpom\UniversalDownloader\Factory\Psr17Factories($factory, $factory, $factory);
+$downloader = new \Balpom\UniversalDownloader\Downloader($client, $factoryies);
 ```
 
 #### Downloader creation based on GuzzleHttp.
@@ -47,15 +55,17 @@ $factory = new \Nyholm\Psr7\Factory\Psr17Factory();
 $factories = new \Balpom\Downloader\Factory\Psr17Factories($factory, $factory, $factory);
 // In my realisation Psr17Factory factories required.
 // You may make your own realisation, bases on GuzzleHttp options (it has own Psr17Factory).
-$downloader = new \Balpom\Downloader\Psr18Downloader($client, $factories);
+$downloader = new \Balpom\UniversalDownloader\Downloader($client, $factoryies);
 ```
 
 #### Download URI
 For test purpose will make request to site [https://ipmy.ru](https://ipmy.ru).
 ```php
 $downloader = $downloader->get('http://ipmy.ru/ip');
-echo $downloader->code(); echo PHP_EOL; // Must be 200.
-echo $downloader->content(); echo PHP_EOL; // Must be your IP.
+$result = $downloader->result();
+echo $result->code(); echo PHP_EOL; // Must be 200.
+echo $result->content(); echo PHP_EOL; // Must be your IP.
+echo $result->mime(); echo PHP_EOL; // Must be "text/html".
 ```
 
 Extended sample you may find in "tests/test-psr18.php" file - just run it:

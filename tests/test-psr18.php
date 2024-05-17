@@ -18,18 +18,20 @@ $client2 = new Client();
 $downloader = new Downloader($client1, $factories);
 
 $downloader = $downloader->get('https://ipmy.ru/ip');
-echo $downloader->code() . PHP_EOL;
-echo $downloader->content() . PHP_EOL;
-echo $downloader->mime() . PHP_EOL;
+$result = $downloader->result();
+echo $result->code() . PHP_EOL;
+echo $result->content() . PHP_EOL;
+echo $result->mime() . PHP_EOL;
 
 $downloader = $downloader->get('https://ipmy.ru/host');
-$html = $downloader->content();
+$result = $downloader->result();
+$html = $result->content();
 echo $html . PHP_EOL;
 
 sleep(3);
 
 $downloader = new Downloader($client2, $factories);
 
-$downloader = $downloader->get('https://php.net/');
-print_r($downloader->response());
+$result = $downloader->get('https://php.net/');
+print_r($result->response());
 

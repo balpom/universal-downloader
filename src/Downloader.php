@@ -75,7 +75,7 @@ class Downloader extends AbstractPSR18Downloader
             $attempt++;
             try {
                 @$this->response = $this->sendRequest($request);
-                $code = $this->code();
+                @$code = $this->response->getStatusCode();
 
                 // 3xx redirects
                 if ((301 === $code || 302 === $code || 303 === $code || 307 === $code) && 0 < $this->redirects && $redirects < $this->redirects) {
