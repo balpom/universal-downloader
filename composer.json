@@ -1,4 +1,4 @@
-{
+ {
     "name": "balpom/universal-downloader",
     "description": "Downloads the contents of the specified URI (or file).",
     "type": "library",
