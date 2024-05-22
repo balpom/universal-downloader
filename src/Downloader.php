@@ -22,7 +22,8 @@ class Downloader extends AbstractPSR18Downloader
 
     public function __construct(
             ClientInterface $client,
-            Psr17FactoriesInterface $factory)
+            Psr17FactoriesInterface $factory
+    )
     {
         $this->client = $client;
         $this->requestFactory = $factory->request();

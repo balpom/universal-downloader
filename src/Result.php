@@ -19,7 +19,7 @@ class Result implements DownloadResultInterface
         return $this->content;
     }
 
-    protected function setContent(string|false $content)
+    protected function setContent(string|false $content): void
     {
         $this->content = $content;
     }

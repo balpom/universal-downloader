@@ -12,10 +12,12 @@ class HttpResult extends Result implements HttpDownloadResultInterface
     private string|false $mime;
     private int|false $code;
 
-    public function __construct(string|false $content = false,
+    public function __construct(
+            string|false $content = false,
             int|false $date = false,
             string|false $mime = false,
-            int|false $code = false)
+            int|false $code = false
+    )
     {
         $this->setContent($content);
         $this->setDate($date);
@@ -38,12 +40,12 @@ class HttpResult extends Result implements HttpDownloadResultInterface
         return $this->code;
     }
 
-    protected function setDate(int|false $date)
+    protected function setDate(int|false $date): void
     {
         $this->date = $date;
     }
 
-    protected function setMime(string|false $mime)
+    protected function setMime(string|false $mime): void
     {
         if (false !== $mime && !$this->checkMime($mime)) {
             throw new DownloaderException('Invalid MIME!');
@@ -51,7 +53,7 @@ class HttpResult extends Result implements HttpDownloadResultInterface
         $this->mime = $mime;
     }
 
-    protected function setCode(int|false $code)
+    protected function setCode(int|false $code): void
     {
         if (false !== $code && !$this->checkCode($code)) {
             throw new DownloaderException('Invalid HTTP code!');
@@ -59,7 +61,7 @@ class HttpResult extends Result implements HttpDownloadResultInterface
         $this->code = $code;
     }
 
-    protected function checkMime(string $mime)
+    protected function checkMime(string $mime): bool
     {
         if (false === strpos($mime, '/') || 1 < substr_count($mime, '/')) {
             return false;
@@ -72,9 +74,9 @@ class HttpResult extends Result implements HttpDownloadResultInterface
         return true;
     }
 
-    protected function checkCode(int $code)
+    protected function checkCode(int $code): bool
     {
-        if (100 > $code || 599 < $code) {
+        if (100 > $code || 599 < $code) { // Simple checking...
             return false;
         }
 

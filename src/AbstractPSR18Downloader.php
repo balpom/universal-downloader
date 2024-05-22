@@ -62,7 +62,7 @@ abstract class AbstractPSR18Downloader extends AbstractHttpDownloader implements
         return $this;
     }
 
-    protected function getLocation()
+    protected function getLocation(): string|false
     {
         try {
             $location = $this->response->getHeader('Location');
@@ -73,14 +73,14 @@ abstract class AbstractPSR18Downloader extends AbstractHttpDownloader implements
         return isset($location[0]) ? $location[0] : false;
     }
 
-    protected function getHeaderName(string $header)
+    protected function getHeaderName(string $header): string
     {
         $pos = strpos($header, ':');
 
         return trim(substr($header, 0, $pos));
     }
 
-    protected function getHeaderValue(string $header)
+    protected function getHeaderValue(string $header): string
     {
         $pos = strpos($header, ':') + 1;
 

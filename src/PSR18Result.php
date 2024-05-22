@@ -26,18 +26,21 @@ class PSR18Result extends HttpResult implements PSR18DownloadResultInterface
 
     public function response(): ResponseInterface|null
     {
+        if (null !== $this->response) {
+            $this->response->getBody()->rewind(); // Just in case...
+        }
         return $this->response;
     }
 
     private function getContent(): string|false
     {
-
-        if (null === $this->response || 200 !== $this->getCode()) {
+        $response = $this->response();
+        if (null === $response || 200 !== $this->getCode()) {
             return false;
         }
 
         try {
-            $content = $this->response->getBody()->getContents();
+            $content = $response->getBody()->getContents();
         } catch (Exception $e) {
             return false;
         }
@@ -47,12 +50,13 @@ class PSR18Result extends HttpResult implements PSR18DownloadResultInterface
 
     private function getCode(): int|false
     {
-        if (null === $this->response) {
+        $response = $this->response();
+        if (null === $response) {
             return false;
         }
 
         try {
-            $code = $this->response->getStatusCode();
+            $code = $response->getStatusCode();
         } catch (Exception $e) {
             return false;
         }
@@ -62,12 +66,13 @@ class PSR18Result extends HttpResult implements PSR18DownloadResultInterface
 
     private function getMime(): string|false
     {
-        if (null === $this->response) {
+        $response = $this->response();
+        if (null === $response) {
             return false;
         }
 
         try {
-            $mime = $this->response->getHeaderLine('Content-Type');
+            $mime = $response->getHeaderLine('Content-Type');
         } catch (Exception $e) {
             return false;
         }
@@ -85,12 +90,13 @@ class PSR18Result extends HttpResult implements PSR18DownloadResultInterface
 
     private function getDate(): int|false
     {
-        if (null === $this->response) {
+        $response = $this->response();
+        if (null === $response) {
             return false;
         }
 
         try {
-            $date = $this->response->getHeaderLine('Last-Modified');
+            $date = $response->getHeaderLine('Last-Modified');
         } catch (Exception $e) {
             $date = null;
         }
@@ -100,7 +106,7 @@ class PSR18Result extends HttpResult implements PSR18DownloadResultInterface
         }
 
         try {
-            $date = $this->response->getHeaderLine('Date');
+            $date = $response->getHeaderLine('Date');
         } catch (Exception $e) {
             $date = null;
         }
