@@ -45,7 +45,7 @@ $factory = new \Nyholm\Psr7\Factory\Psr17Factory();
 $client = new \Webclient\Http\Webclient($factory, $factory);
 // Psr17Factories(RequestFactoryInterface $request, StreamFactoryInterface $stream, UriFactoryInterface $uri)
 $factories = new \Balpom\UniversalDownloader\Factory\Psr17Factories($factory, $factory, $factory, $factory);
-$downloader = new \Balpom\UniversalDownloader\Downloader($client, $factoryies);
+$downloader = new \Balpom\UniversalDownloader\Downloader($client, $factories);
 ```
 
 #### Downloader creation based on GuzzleHttp.
@@ -55,7 +55,7 @@ $factory = new \Nyholm\Psr7\Factory\Psr17Factory();
 $factories = new \Balpom\Downloader\Factory\Psr17Factories($factory, $factory, $factory, $factory);
 // In my realisation Psr17Factory factories required.
 // You may make your own realisation, bases on GuzzleHttp options (it has own Psr17Factory).
-$downloader = new \Balpom\UniversalDownloader\Downloader($client, $factoryies);
+$downloader = new \Balpom\UniversalDownloader\Downloader($client, $factories);
 ```
 
 #### Download URI
