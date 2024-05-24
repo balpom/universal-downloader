@@ -7,6 +7,7 @@ namespace Balpom\UniversalDownloader;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Balpom\UniversalDownloader\Factory\Psr17FactoriesInterface;
@@ -17,6 +18,7 @@ class Downloader extends AbstractPSR18Downloader
 
     protected ClientInterface $client;
     protected RequestFactoryInterface $requestFactory;
+    protected ResponseFactoryInterface $responseFactory;
     protected StreamFactoryInterface $streamFactory;
     protected UriFactoryInterface $uriFactory;
 
@@ -27,8 +29,10 @@ class Downloader extends AbstractPSR18Downloader
     {
         $this->client = $client;
         $this->requestFactory = $factory->request();
+        $this->responseFactory = $factory->response();
         $this->streamFactory = $factory->stream();
         $this->uriFactory = $factory->uri();
+        $this->response = $this->responseFactory->createResponse(404); // Empty default response.
     }
 
     public function get(string $uri): PSR18DownloadInterface
@@ -125,10 +129,11 @@ class Downloader extends AbstractPSR18Downloader
                     }
                 }
 
-                if (!in_array($code, [
-                            408, 409, 421, 423, 424, 429, 499, 500, 502, 503,
-                            504, 507, 520, 521, 522, 532, 524, 525, 526
-                        ])) {
+                if (!in_array($code,
+                                [
+                                    408, 409, 421, 423, 424, 429, 499, 500, 502, 503,
+                                    504, 507, 520, 521, 522, 532, 524, 525, 526
+                                ])) {
                     break;
                 }
 

@@ -44,7 +44,7 @@ composer require guzzlehttp/guzzle
 $factory = new \Nyholm\Psr7\Factory\Psr17Factory();
 $client = new \Webclient\Http\Webclient($factory, $factory);
 // Psr17Factories(RequestFactoryInterface $request, StreamFactoryInterface $stream, UriFactoryInterface $uri)
-$factories = new \Balpom\UniversalDownloader\Factory\Psr17Factories($factory, $factory, $factory);
+$factories = new \Balpom\UniversalDownloader\Factory\Psr17Factories($factory, $factory, $factory, $factory);
 $downloader = new \Balpom\UniversalDownloader\Downloader($client, $factoryies);
 ```
 

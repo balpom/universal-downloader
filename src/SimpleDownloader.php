@@ -7,7 +7,7 @@ namespace Balpom\UniversalDownloader;
 class SimpleDownloader extends AbstractDownloader implements DownloadInterface, DownloadResultInterface
 {
 
-    private string|false|null $content;
+    private string|false|null $content = null;
 
     public function get(string $uri): DownloadInterface
     {
@@ -31,6 +31,6 @@ class SimpleDownloader extends AbstractDownloader implements DownloadInterface, 
 
     public function content(): string|false
     {
-        return $this->content;
+        return (null !== $this->content) ? $this->content : false;
     }
 }
