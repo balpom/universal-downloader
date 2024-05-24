@@ -52,7 +52,7 @@ $downloader = new \Balpom\UniversalDownloader\Downloader($client, $factoryies);
 ```php
 $client = new \GuzzleHttp\Client();
 $factory = new \Nyholm\Psr7\Factory\Psr17Factory();
-$factories = new \Balpom\Downloader\Factory\Psr17Factories($factory, $factory, $factory);
+$factories = new \Balpom\Downloader\Factory\Psr17Factories($factory, $factory, $factory, $factory);
 // In my realisation Psr17Factory factories required.
 // You may make your own realisation, bases on GuzzleHttp options (it has own Psr17Factory).
 $downloader = new \Balpom\UniversalDownloader\Downloader($client, $factoryies);
