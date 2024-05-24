@@ -11,7 +11,7 @@ use Webclient\Http\Webclient;
 use GuzzleHttp\Client;
 
 $factory = new Psr17Factory();
-$factories = new Psr17Factories($factory, $factory, $factory);
+$factories = new Psr17Factories($factory, $factory, $factory, $factory);
 $client1 = new Webclient($factory, $factory);
 $client2 = new Client();
 
