@@ -1,4 +1,4 @@
-# universal-downloader
+# balpom/universal-downloader
 ## Simple interfaces for content downloading on the specified URI (or file location) and it's trivial realisations.
 
 This downloader will be useful for websites parsing, working with the REST API and other work with WEB resources via the HTTP protocol.
