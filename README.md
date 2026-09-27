@@ -6,7 +6,7 @@ This version of the package contains an interface implementation for use with an
 It is planned to make an implementation that works through [Selenium WebDriver](https://github.com/php-webdriver/php-webdriver).
 
 ### Requirements 
-- **PHP >= 8.1**
+- **PHP >= 8.2**
 
 ### Installation
 #### Using composer (recommended)
@@ -18,7 +18,7 @@ composer require balpom/universal-downloader
 
 ```php
 $downloader = new \Balpom\UniversalDownloader\SimpleDownloader();
-$downloader = $downloader->get('https://ipmy.ru/ip');
+$downloader = $downloader->get('http://ipmy.ru/ip');
 echo $downloader->content() . PHP_EOL; // Must be your IP.
 ```
 
@@ -45,21 +45,21 @@ $factory = new \Nyholm\Psr7\Factory\Psr17Factory();
 $client = new \Webclient\Http\Webclient($factory, $factory);
 // Psr17Factories(RequestFactoryInterface $request, StreamFactoryInterface $stream, UriFactoryInterface $uri)
 $factories = new \Balpom\UniversalDownloader\Factory\Psr17Factories($factory, $factory, $factory, $factory);
-$downloader = new \Balpom\UniversalDownloader\Downloader($client, $factories);
+$downloader = new \Balpom\UniversalDownloader\Downloader($client, $factoryies);
 ```
 
 #### Downloader creation based on GuzzleHttp.
 ```php
 $client = new \GuzzleHttp\Client();
 $factory = new \Nyholm\Psr7\Factory\Psr17Factory();
-$factories = new \Balpom\Downloader\Factory\Psr17Factories($factory, $factory, $factory, $factory);
+$factories = new \Balpom\Downloader\Factory\Psr17Factories($factory, $factory, $factory);
 // In my realisation Psr17Factory factories required.
 // You may make your own realisation, bases on GuzzleHttp options (it has own Psr17Factory).
-$downloader = new \Balpom\UniversalDownloader\Downloader($client, $factories);
+$downloader = new \Balpom\UniversalDownloader\Downloader($client, $factoryies);
 ```
 
 #### Download URI
-For test purpose will make request to site [https://ipmy.ru](https://ipmy.ru).
+For test purpose will make request to site [http://ipmy.ru](http://ipmy.ru).
 ```php
 $downloader = $downloader->get('http://ipmy.ru/ip');
 $result = $downloader->result();
