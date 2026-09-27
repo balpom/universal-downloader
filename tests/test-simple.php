@@ -4,12 +4,13 @@ namespace Balpom\UniversalDownloader;
 
 require __DIR__ . "/../vendor/autoload.php";
 
-use Balpom\UniversalDownloader\SimpleDownloader;
-
 $downloader = new SimpleDownloader();
 
-$downloader = $downloader->get('https://ipmy.ru/ip');
+$downloader->get('http://ipmy.ru/ip');
 echo $downloader->content() . PHP_EOL;
 
-$downloader = $downloader->get('https://ipmy.ru/host');
+$downloader->get('http://ipmy.ru/host');
+echo $downloader->content() . PHP_EOL;
+
+$downloader->get('https://httpbin.org/anything');
 echo $downloader->content() . PHP_EOL;
