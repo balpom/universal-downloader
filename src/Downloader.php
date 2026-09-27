@@ -11,11 +11,10 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Balpom\UniversalDownloader\Factory\Psr17FactoriesInterface;
-use \Exception;
+use \Throwable;
 
 class Downloader extends AbstractPSR18Downloader
 {
-
     protected ClientInterface $client;
     protected RequestFactoryInterface $requestFactory;
     protected ResponseFactoryInterface $responseFactory;
@@ -35,37 +34,82 @@ class Downloader extends AbstractPSR18Downloader
         $this->response = $this->responseFactory->createResponse(404); // Empty default response.
     }
 
-    public function get(string $uri): PSR18DownloadInterface
+    public function get(string $uri, string|array|null $headers = null): PSR18DownloadInterface
     {
         try {
             $request = $this->requestFactory->createRequest('GET', $uri);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new DownloadException("Don't create GET request for URI " . $uri);
         }
 
         return $this->send($request);
     }
 
-    public function head(string $uri): PSR18DownloadInterface
+    public function head(string $uri, string|array|null $headers = null): PSR18DownloadInterface
     {
         try {
             $request = $this->requestFactory->createRequest('HEAD', $uri);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new DownloadException("Don't create HEAD request for URI " . $uri);
         }
 
         return $this->send($request);
     }
 
-    public function post(string $uri, array $data = []): PSR18DownloadInterface
+    public function post(string $uri, string|array|null $body = null, string|array|null $headers = null): PSR18DownloadInterface
     {
         try {
             $request = $this->requestFactory->createRequest('POST', $uri);
-            $data = http_build_query($data);
-            $stream = $this->streamFactory->createStream($data);
+            if (is_array($body)) {
+                $body = http_build_query($body);
+            }
+            $stream = $this->streamFactory->createStream($body);
             $request = $request->withBody($stream);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new DownloadException("Don't create POST request for URI " . $uri);
+        }
+
+        return $this->send($request);
+    }
+
+    public function put(string $uri, string|array|null $body = null, string|array|null $headers = null): PSR18DownloadInterface
+    {
+        try {
+            $request = $this->requestFactory->createRequest('PUT', $uri);
+            if (is_array($body)) {
+                $body = http_build_query($body);
+            }
+            $stream = $this->streamFactory->createStream($body);
+            $request = $request->withBody($stream);
+        } catch (Throwable $e) {
+            throw new DownloadException("Don't create PUT request for URI " . $uri);
+        }
+
+        return $this->send($request);
+    }
+
+    public function patch(string $uri, string|array|null $body = null, string|array|null $headers = null): PSR18DownloadInterface
+    {
+        try {
+            $request = $this->requestFactory->createRequest('PATCH', $uri);
+            if (is_array($body)) {
+                $body = http_build_query($body);
+            }
+            $stream = $this->streamFactory->createStream($body);
+            $request = $request->withBody($stream);
+        } catch (Throwable $e) {
+            throw new DownloadException("Don't create PATCH request for URI " . $uri);
+        }
+
+        return $this->send($request);
+    }
+
+    public function delete(string $uri, string|array|null $headers = null): PSR18DownloadInterface
+    {
+        try {
+            $request = $this->requestFactory->createRequest('DELETE', $uri);
+        } catch (Throwable $e) {
+            throw new DownloadException("Don't create DELETE request for URI " . $uri);
         }
 
         return $this->send($request);
@@ -140,7 +184,7 @@ class Downloader extends AbstractPSR18Downloader
                 if ($attempt < $this->attempts) {
                     sleep($this->pause);
                 }
-            } catch (Exception $e) { // Not doing anything.
+            } catch (Throwable $e) { // Not doing anything.
             }
         } while ($attempt <= $this->attempts);
 
@@ -153,7 +197,7 @@ class Downloader extends AbstractPSR18Downloader
             foreach ($this->headers as $header) {
                 $name = $this->getHeaderName($header);
                 $value = $this->getHeaderValue($header);
-                if (!empty($name) && !empty($value)) {
+                if (!empty($name) && (!empty($value) || '0' === $value || 0 === $value)) {
                     $request = $request->withAddedHeader($name, $value);
                 }
             }
@@ -161,4 +205,5 @@ class Downloader extends AbstractPSR18Downloader
 
         return $request;
     }
+
 }

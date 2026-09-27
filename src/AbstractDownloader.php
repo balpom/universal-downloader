@@ -6,11 +6,11 @@ namespace Balpom\UniversalDownloader;
 
 abstract class AbstractDownloader implements DownloadInterface
 {
-
     protected int $attempts = 1; // Number of request attempts.
     protected int $pause = 10; // Pause (in seconds) between request attempts.
+    protected int $timeout = 60; // Connection timeout.
 
-    abstract public function get(string $uri): DownloadInterface;
+    abstract public function get(string $uri, string|array|null $headers = null): DownloadInterface;
 
     public function attempts(int $attempts): DownloadInterface
     {
@@ -34,4 +34,15 @@ abstract class AbstractDownloader implements DownloadInterface
 
         return $this;
     }
+
+    public function timeout(int $seconds): DownloadInterface
+    {
+        if (0 > $seconds) {
+            $seconds = 0;
+        }
+        $this->timeout = $seconds;
+
+        return $this;
+    }
+
 }

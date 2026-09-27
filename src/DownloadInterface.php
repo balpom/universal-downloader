@@ -18,9 +18,15 @@ interface DownloadInterface
     public function pause(int $seconds): DownloadInterface;
 
     /**
-     * Make request content of resource and save it into internal variable.
+     * Set connection timeout.
+     */
+    public function timeout(int $seconds): DownloadInterface;
+
+    /**
+     * Requests content of resource and saves it in an internal variable.
      * Resource may be either local or remote file or WEB-resource.
      * For WEB-resource request is being made with GET method.
      */
-    public function get(string $uri): DownloadInterface;
+    public function get(string $uri, string|array|null $headers = null): DownloadInterface;
+
 }

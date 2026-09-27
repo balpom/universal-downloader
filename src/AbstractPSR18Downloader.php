@@ -7,11 +7,11 @@ namespace Balpom\UniversalDownloader;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Client\ClientInterface;
-use \Exception;
+use Balpom\UniversalDownloader\Result\HttpDownloadResultInterface;
+use Balpom\UniversalDownloader\Result\PSR18Result;
 
 abstract class AbstractPSR18Downloader extends AbstractHttpDownloader implements ClientInterface, PSR18DownloadInterface
 {
-
     protected ClientInterface $client; // PSR18 HTTP client.
     protected ResponseInterface|null $response; // Last response.
     protected int $redirects = 5; // Number of redirects following.
@@ -27,11 +27,17 @@ abstract class AbstractPSR18Downloader extends AbstractHttpDownloader implements
         return $this->response;
     }
 
-    abstract public function get(string $uri): DownloadInterface;
+    abstract public function get(string $uri, string|array|null $headers = null): DownloadInterface;
 
-    abstract public function head(string $uri): HttpDownloadInterface;
+    abstract public function head(string $uri, string|array|null $headers = null): HttpDownloadInterface;
 
-    abstract public function post(string $uri, array $data = []): HttpDownloadInterface;
+    abstract public function post(string $uri, string|array|null $body = null, string|array|null $headers = null): HttpDownloadInterface;
+
+    abstract public function put(string $uri, string|array|null $body = null, string|array|null $headers = null): HttpDownloadInterface;
+
+    abstract public function patch(string $uri, string|array|null $body = null, string|array|null $headers = null): HttpDownloadInterface;
+
+    abstract public function delete(string $uri, string|array|null $headers = null): HttpDownloadInterface;
 
     public function sendRequest(RequestInterface $request): ResponseInterface
     {
@@ -62,28 +68,4 @@ abstract class AbstractPSR18Downloader extends AbstractHttpDownloader implements
         return $this;
     }
 
-    protected function getLocation(): string|false
-    {
-        try {
-            $location = $this->response->getHeader('Location');
-        } catch (Exception $e) {
-            throw new DownloaderException("Error: unable to get redirect location.");
-        }
-
-        return isset($location[0]) ? $location[0] : false;
-    }
-
-    protected function getHeaderName(string $header): string
-    {
-        $pos = strpos($header, ':');
-
-        return trim(substr($header, 0, $pos));
-    }
-
-    protected function getHeaderValue(string $header): string
-    {
-        $pos = strpos($header, ':') + 1;
-
-        return trim(substr($header, $pos));
-    }
 }
